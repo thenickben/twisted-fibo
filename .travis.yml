@@ -1,11 +1,13 @@
 sudo: required
+language: generic
+
 services: -docker
 
 before_install:
-  - docker build -t thenickben/fibotwisted -f ./client/Dockerfile.dev ./client
+  - docker build -t thenickben/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true thenickben/fibotwisted npm test -- --coverage
+  - docker run -e CI=true thenickben/react-test npm test -- --coverage
 
 after_success:
   - docker build -t thenickben/multi-client ./client
