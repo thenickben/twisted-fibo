@@ -1,0 +1,21 @@
+sudo: required
+services: -docker
+
+before_install:
+  - docker build -t thenickben/fibotwisted -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true thenickben/fibotwisted npm test -- --coverage
+
+after_success:
+  - docker build -t thenickben/multi-client ./client
+  - docker build -t thenickben/multi-nginx ./nginx
+  - docker build -t thenickben/multi-server ./server
+  - docker build -t thenickben/multi-worker ./worker
+  # log into docker cli
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # push to docker hub
+  - docker push thenickben/multi-client
+  - docker push thenickben/multi-nginx
+  - docker push thenickben/multi-server
+  - docker push thenickben/multi-worker
