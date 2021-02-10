@@ -21,3 +21,15 @@ after_success:
   - docker push thenickben/multi-nginx
   - docker push thenickben/multi-server
   - docker push thenickben/multi-worker
+
+deploy:
+  provider: elasticbeanstalk
+  region: "eu-west-2"
+  app: "Twistedfibo"
+  env: "Twistedfibo-env"
+  bucket_name: "elasticbeanstalk-eu-west-2-695166529321"
+  bucket_path: "docker-multi"
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
